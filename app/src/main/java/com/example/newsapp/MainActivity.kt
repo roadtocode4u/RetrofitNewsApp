@@ -18,19 +18,24 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
         val call = ApiInterface.create().getNews()
-        call.enqueue(object: Callback<NewsArticle>{
-            override fun onResponse(call: Call<NewsArticle>, response: Response<NewsArticle>) {
 
-                val adapter = response.body()?.articles?.let {
-                    CustomAdapter(it)
+        call.enqueue(object: Callback<News>{
+
+            override fun onResponse(call: Call<News>, response: Response<News>) {
+
+                Log.d("RESPONSE", "Data: "+response.body())
+
+                val adapter = response.body()?.let {
+                    CustomAdapter(it.data)
                 }
 
                 recyclerView.adapter = adapter
             }
 
-            override fun onFailure(call: Call<NewsArticle>, t: Throwable) {
-                    Log.d("STATUS", "ERROR")
+            override fun onFailure(call: Call<News>, t: Throwable) {
+                Log.d("RESPONSE", "Message: "+t.message)
             }
+
 
         })
 
